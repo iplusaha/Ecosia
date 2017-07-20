@@ -1,0 +1,30 @@
+---
+  - name: create a security group named "{{ ec2_security_group }}"
+    shell: AWS_ACCESS_KEY_ID="{{ aws_access_key }}" AWS_SECRET_ACCESS_KEY="{{ aws_secret_key }}" aws ec2 create-security-group --region "{{ ec2_region }}" --group-name "{{ ec2_security_group }}" --description "{{ ec2_security_group_description }}"
+
+  - name: add a rule that allows incoming traffic over port 22 for SSH
+    shell: AWS_ACCESS_KEY_ID="{{ aws_access_key }}" AWS_SECRET_ACCESS_KEY="{{ aws_secret_key }}" aws ec2 authorize-security-group-ingress --region "{{ ec2_region }}" --group-name "{{ ec2_security_group }}" --protocol tcp --port 22 --cidr 0.0.0.0/0
+
+  - name: create a key pair named 'test-key-pair'
+    shell: AWS_ACCESS_KEY_ID="{{ aws_access_key }}" AWS_SECRET_ACCESS_KEY="{{ aws_secret_key }}" aws ec2 create-key-pair --region "{{ ec2_region }}" --key-name "{{ ec2_keypair }}" --query 'KeyMaterial' --output text > ~/"{{ ec2_keypair }}".pem
+
+  - shell: chmod 400 ~/"{{ ec2_keypair }}".pem
+
+  - name: Launch EC2 instance
+    shell: AWS_ACCESS_KEY_ID="{{ aws_access_key }}" AWS_SECRET_ACCESS_KEY="{{ aws_secret_key }}" aws ec2 run-instances --region "{{ ec2_region }}" --image-id "{{ ec2_image }}" --security-group-ids "{{ ec2_security_group }}" --count 1 --instance-type "{{ ec2_instance_type }}" --key-name "{{ ec2_keypair }}" --tag-specifications 'ResourceType=instance,Tags=[{Key="{{ ec2_tag_Name }}",Value="{{ ec2_tag_Type }}"}]'
+
+  - name: Find instance ID and set on a variable
+    shell: AWS_ACCESS_KEY_ID="{{ aws_access_key }}" AWS_SECRET_ACCESS_KEY="{{ aws_secret_key }}" aws ec2 describe-instances --region "{{ ec2_region }}" --filters Name=tag:"{{ ec2_tag_Name }}",Values="{{ ec2_tag_Type }}" --query 'Reservations[0].Instances[0].InstanceId'
+    register: instanceid
+
+  - name: Set instance id in variable
+    set_fact:
+      instance_id: "{{ instanceid.stdout }}"
+
+  - debug: var=instance_id
+
+  - name: Wait for the instance until running
+    shell: AWS_ACCESS_KEY_ID="{{ aws_access_key }}" AWS_SECRET_ACCESS_KEY="{{ aws_secret_key }}" aws ec2 wait instance-running --region "{{ ec2_region }}" --instance-ids {{ instance_id }}
+
+  - name: Return the instance launch time
+    shell: AWS_ACCESS_KEY_ID="{{ aws_access_key }}" AWS_SECRET_ACCESS_KEY="{{ aws_secret_key }}" aws ec2 describe-instances --region "{{ ec2_region }}" --instance-ids {{ instance_id }} --query 'Reservations[0].Instances[0].LaunchTime' | tr -d '"'
