@@ -30,11 +30,14 @@ $pip install boto boto3 awscli
 $pip install --upgrade pip
 
 2. Configure and Run the script. 
-- set your desired values on "ec2-vars/vars.yml" file. in vars.yml file you can add the values for these followin variables:
+- set your desired values on "ec2-vars/vars.yml" file. in vars.yml file you can add values for these following variables:
 
 "aws_access_key", "aws_secret_key", "ec2_keypair", "ec2_security_group", "ec2_security_group_description", "ec2_instance_type", "ec2_image", "ec2_region", "ec2_tag_Name" and "ec2_tag_Type". 
 
- - after inserting these values for variables please run the script using this following command:
-   $ansible-playbook provision-ec2.yml
+- after inserting these values for variables please run the script using this following command:
+
+ $ansible-playbook provision-ec2.yml
+ 
+ - After running this script an ec2 instance will be deployed and as output this script will show the Launch time of this newly deployed instance. 
    
    
