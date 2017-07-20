@@ -11,7 +11,7 @@ Create a simple script, using your language of choice, that creates an AWS EC2 i
 
 *******************************
 
-1. This project is written by Ansible and for API call we are using awscli command. To install Ansible and awscli please follow these steps:
+1. This project is written by Ansible. To install Ansible and awscli please follow these steps:
 
 
 sudo apt-get update
