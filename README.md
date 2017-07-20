@@ -11,23 +11,22 @@ Create a simple script, using your language of choice, that creates an AWS EC2 i
 
 *******************************
 
-1. This project is written by Ansible. To install Ansible please follow these steps:
+1. This project is written by Ansible and for API call we are using awscli command. To install Ansible and awscli please follow these steps:
 
-$sudo -i
 
-$apt-get update
+sudo apt-get update
 
-$apt-get upgrade -y
+sudo apt-get upgrade -y
 
-$wget http://releases.ansible.com/ansible/ansible-latest.tar.gz
+sudo wget http://releases.ansible.com/ansible/ansible-latest.tar.gz
 
-$tar -xzvf ansible-latest.tar.gz
+sudo tar -xzvf ansible-latest.tar.gz
 
-$apt-get install -y python-pip python-setuptools python-yaml python-paramiko python-jinja2 python-httplib2 jq python-mysqldb
+sudo apt-get install -y python-pip python-setuptools python-yaml python-paramiko python-jinja2 python-httplib2 jq python-mysqldb
 
-$pip install boto boto3 awscli
+sudo pip install boto boto3 awscli
 
-$pip install --upgrade pip
+sudo pip install --upgrade pip
 
 2. Configure and Run the script. 
 - set your desired values on "ec2-vars/vars.yml" file. in vars.yml file you can add values for these following variables:
