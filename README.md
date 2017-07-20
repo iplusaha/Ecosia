@@ -35,7 +35,7 @@ sudo pip install --upgrade pip
 
 - after inserting these values for variables please run the script using this following command:
 
- $ansible-playbook provision-ec2.yml
+ ansible-playbook provision-ec2.yml
  
  - After running this script an ec2 instance will be deployed and as output this script will show the Launch time of this newly deployed instance. 
    
